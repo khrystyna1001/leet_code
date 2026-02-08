@@ -1,0 +1,43 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        curr = root
+        prevValue = float('-inf') 
+
+        while curr:
+            if curr.left is None:
+                if curr.val <= prevValue:
+
+                    # Not in ascending order
+                    return False
+                prevValue = curr.val
+                curr = curr.right
+            else:
+
+                # Find the inorder predecessor of curr
+                pre = curr.left
+                while pre.right and pre.right != curr:
+                    pre = pre.right
+
+                if pre.right is None:
+
+                    # Create a temporary 
+                    # thread to the curr node
+                    pre.right = curr
+                    curr = curr.left
+                else:
+                    pre.right = None
+
+                    if curr.val <= prevValue:
+
+                        # Not in ascending order
+                        return False
+                    prevValue = curr.val
+                    curr = curr.right
+
+        return True
