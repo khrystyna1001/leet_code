@@ -1,0 +1,11 @@
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        for length in range(len(s), 0, -1):
+            # Move a "window" of that length across the string
+            for start in range(len(s) - length + 1):
+                substring = s[start : start + length]
+                
+                # If it reads the same forward and backward
+                if substring == substring[::-1]:
+                    return substring
+        return ""
