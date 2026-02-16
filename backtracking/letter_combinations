@@ -1,0 +1,29 @@
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        if not digits:
+            return []
+        
+        # 1. The Phone Mapping
+        mapping = {
+            "2": "abc", "3": "def", "4": "ghi", "5": "jkl", 
+            "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"
+        }
+        
+        res = []
+        def backtrack(index, path):
+            # 2. Base Case: If the path is the right length, save it
+            if len(path) == len(digits):
+                res.append("".join(path))
+                return
+            # 3. Get letters for the current digit (e.g., "2" -> "abc")
+            possible_letters = mapping[digits[index]]
+            for letter in possible_letters:
+                # 4. Action: Add the letter to our path
+                path.append(letter)
+                # 5. Recursion: Move to the next digit
+                backtrack(index + 1, path)
+                # 6. Backtrack: Remove the letter so we can try the next one
+                path.pop()
+
+        backtrack(0, [])
+        return res
