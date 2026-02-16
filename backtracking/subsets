@@ -1,0 +1,20 @@
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        
+        def backtrack(start, path):
+            # 1. Every step is a valid subset! 
+            # (Starts with the empty set [], then [1], [1,2], etc.)
+            res.append(path[:])
+            # 2. Iterate through the remaining candidates
+            for i in range(start, len(nums)):
+                # Action: Include nums[i]
+                path.append(nums[i])
+                # Recursion: Move to the next index (i + 1)
+                backtrack(i + 1, path)
+                
+                # Backtrack: Remove nums[i] to try the next number
+                path.pop()
+        
+        backtrack(0, [])
+        return res
