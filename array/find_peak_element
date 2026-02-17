@@ -1,0 +1,20 @@
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        left = 0
+        right = len(nums) - 1
+        
+        while left < right:
+            mid = (left + right) // 2
+            
+            # Compare middle element with its right neighbor
+            if nums[mid] < nums[mid + 1]:
+                # We are on an upward slope. 
+                # The peak must be to the right (excluding mid).
+                left = mid + 1
+            else:
+                # We are on a downward slope.
+                # The peak is to the left (including mid).
+                right = mid
+        
+        # When left == right, we've converged on a peak index
+        return left
