@@ -1,0 +1,44 @@
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        rows, cols = len(board), len(board[0])
+        
+        # Optimization: If word is longer than total cells, it's impossible
+        if len(word) > rows * cols:
+            return False
+        
+        # Optimization: Check if board has enough of each character
+        board_counts = Counter(char for row in board for char in row)
+        word_counts = Counter(word)
+        for char, count in word_counts.items():
+            if board_counts[char] < count:
+                return False
+
+        def dfs(r, c, i):
+            if i == len(word):
+                return True
+            
+            if (r < 0 or c < 0 or r >= rows or c >= cols or 
+                board[r][c] != word[i]):
+                return False
+            
+            # Temporary mark as visited
+            temp = board[r][c]
+            board[r][c] = "#"
+            
+            # Explore 4 directions
+            found = (dfs(r + 1, c, i + 1) or 
+                     dfs(r - 1, c, i + 1) or 
+                     dfs(r, c + 1, i + 1) or 
+                     dfs(r, c - 1, i + 1))
+            
+            # Backtrack: restore the character
+            board[r][c] = temp
+            return found
+
+        for r in range(rows):
+            for c in range(cols):
+                # Only start DFS if the first letter matches
+                if board[r][c] == word[0] and dfs(r, c, 0):
+                    return True
+        
+        return False
