@@ -1,0 +1,22 @@
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        if not matrix or not matrix[0]:
+            return False
+        
+        rows = len(matrix)
+        cols = len(matrix[0])
+        
+        curr_row = 0
+        curr_col = cols - 1
+        
+        while curr_row < rows and curr_col >= 0:
+            current_val = matrix[curr_row][curr_col]
+            
+            if current_val == target:
+                return True
+            elif current_val > target:
+                curr_col -= 1
+            else:
+                curr_row += 1
+        
+        return False
