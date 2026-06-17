@@ -1,0 +1,56 @@
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        
+        rows = [set() for _ in range(9)]
+        cols = [set() for _ in range(9)]
+        boxes = [set() for _ in range(9)]
+
+        for r in range(9):
+            for c in range(9):
+                val = board[r][c]
+                if val != '.':
+                    rows[r].add(val)
+                    cols[c].add(val)
+                    box_idx = (r // 3) * 3 + c // 3
+                    boxes[box_idx].add(val)
+        
+        
+        def backtrack(row, col):
+            # If we reach row 9, we successfully filled the board
+            if row == 9:
+                return True
+            # If we reach column 9, move to the next row
+            if col == 9:
+                return backtrack(row + 1, 0)
+            
+            # If the cell is already filled, skip it
+            if board[row][col] != '.':
+                return backtrack(row, col + 1)
+            
+            box_idx = (row // 3) * 3 + col // 3
+            
+            # Try placing digits 1-9
+            for num in map(str, range(1, 10)):
+                if num not in rows[row] and num not in cols[col] and num not in boxes[box_idx]:
+                    # Place the number (and update our lookup sets)
+                    board[row][col] = num
+                    rows[row].add(num)
+                    cols[col].add(num)
+                    boxes[box_idx].add(num)
+                    
+                    # Move to next cell
+                    if backtrack(row, col + 1):
+                        return True
+                    
+                    # Backtrack (Undo the placement)
+                    board[row][col] = '.'
+                    rows[row].remove(num)
+                    cols[col].remove(num)
+                    boxes[box_idx].remove(num)
+                    
+            return False
+
+        backtrack(0, 0)
